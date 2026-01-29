@@ -207,7 +207,7 @@ function enviarWhats() {
         msg += `*${idx+1}. ${i.b.toUpperCase()}*\n• Sabores: ${i.sabores.map(s=>s.n).join(' e ')}\n• Extras: ${i.extras.map(e=>e.n).join(', ') || 'Nenhum'}\n• Acomps: ${i.acomps.join(', ') || 'Nenhum'}\nValor: R$${i.t.toFixed(2)}\n\n`;
     });
     msg += `*TOTAL GERAL: R$ ${document.getElementById('total-final').innerText}*`;
-    window.open(`https://api.whatsapp.com/send?phone=${TELEFONE}&text=${encodeURIComponent(msg)}`, '_blank');
+    window.open(`https://api.whatsapp.com/send?phone=${TELEFONE}&text=${encodeURIComponent(msg)}`, '_blank'); carrinhoTotal = []; render();
 }
 
 function init() {
