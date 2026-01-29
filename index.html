@@ -25,16 +25,17 @@
         <button class="aba-btn" onclick="mudarAba('acai', this)">Açaí</button>
         <button class="aba-btn" onclick="mudarAba('waffle', this)">Waffle</button>
         <button class="aba-btn" onclick="mudarAba('sobremesas', this)">Sobremesas</button>
+    <button class="aba-btn" onclick="mudarAba('BEBIDAS', this)">BEBIDAS</button>
     </div>
 
     <div id="rolinhos" class="secao ativa">
         <h3>1. Base</h3>
         <div class="grid-flex">
             <button class="btn-opcao" onclick="setBase('Rolinho 1 Sabor', 15, 1)">1 Sabor (R$15)</button>
-            <button class="btn-opcao" onclick="setBase('Rolinho 2 Sabores', 17, 2)">2 Sabores (R$17)</button>
-            <button class="btn-opcao" onclick="setBase('Rolinho 3 Sabores', 20, 3)">3 Sabores (R$20)</button> 
-            <button class="btn-opcao" onclick="setBase('Casquinha', 10, 1)">Casquinha (R$10)</button> 
-            <button class="btn-opcao" onclick="setBase('Casquinha 2 Sabores', 13, 2)">Casquinha 2 Sabores (R$13)</button> 
+            <button class="btn-opcao" onclick="setBase('Rolinho 2 Sabores', 17, 2)">2 Sabores (R$17)</button> 
+          <button class="btn-opcao" onclick="setBase('Rolinho 3 Sabores', 20, 3)">3 Sabores (R$20)</button> 
+           <button class="btn-opcao" onclick="setBase('Casquinha', 10, 1)">Casquinha (R$10)</button> 
+          <button class="btn-opcao" onclick="setBase('Casquinha 2 Sabores', 13, 2)">Casquinha 2 Sabores (R$13)</button> 
         </div>
         <h3>2. Sabores</h3><div class="grid-flex" id="list-sabores-rol"></div>
         <h3>3. Adicionais Pagos</h3><div id="list-extras-rol"></div>
@@ -72,6 +73,29 @@
         <div id="brownie-extra"></div>
         <button class="btn-add" onclick="adicionarAoCarrinho()">+ Adicionar Sobremesa</button>
     </div>
+  <div id="BEBIDAS" class="secao">
+        <h3>Cafes </h3>
+        <div class="grid-flex">
+            <button class="btn-opcao" onclick="setBase('Cafes', 6, 1, 'Cafe expresso')">Expresso</button>
+            <button class="btn-opcao" onclick="setBase('Cafes', 8, 1, 'Expresso duplo')">Expresso duplo</button>
+            <button class="btn-opcao" onclick="setBase('Cafes', 10, 1, 'cappuccino')">Cappuccino</button>
+          <button class="btn-opcao" onclick="setBase('Cafes', 8, 1, 'Cafe com leite')">Cafe com leite</button>
+          <button class="btn-opcao" onclick="setBase('Cafes', 12, 1, 'Cappuccino chocolate')">Cappuccino chocolate</button>
+          <button class="btn-opcao" onclick="setBase('Cafes', 12, 1, 'Mocha')">Mocha</button>
+        </div>  <h3>Bebidas </h3>
+        <div class="grid-flex">
+            <button class="btn-opcao" onclick="setBase('Agua', 4, 'Agua')">Agua</button>
+           <button class="btn-opcao" onclick="setBase('Agua c/ gas', 5, 'Agua c/ gas')">Agua c/ gas</button>
+        <button class="btn-opcao" onclick="setBase('Coca cola', 6, 'Coca cola')">Coca cola</button>
+           <button class="btn-opcao" onclick="setBase('Coca zero', 7, 'Coca zero')">Coca zero</button>
+           <button class="btn-opcao" onclick="setBase('Guarana', 6, 'Guarana')">Guarana</button>
+           <button class="btn-opcao" onclick="setBase('Agua 2', 8, '2 Aguas')">2 Aguas</button>
+          <button class="btn-opcao" onclick="setBase('Agua 3', 12, '3 Aguas')">3 Aguas</button>
+          <button class="btn-opcao" onclick="setBase('Agua 2', 16, '4 Aguas')">4 Aguas</button>
+          <button class="btn-opcao" onclick="setBase('2 Refrigerantes', 12, '2 Coca cola/guarana')">2 Coca/guarana</button>
+          <button class="btn-opcao" onclick="setBase('Coca zero 2', 14, 'Coca zero 2')">Coca zero 2</button>
+        <button class="btn-add" onclick="adicionarAoCarrinho()">+ Adicionar Sobremesa</button>
+    </div>
 </div>
 
 <div class="carrinho">
@@ -79,34 +103,7 @@
     <div id="carrinho-itens"><i>Vazio...</i></div>
     <div style="font-weight: bold; text-align: center; margin-top: 10px;">Total: R$ <span id="total-final">0.00</span></div>
     <button class="btn-enviar" onclick="enviarWhats()">Enviar Pedido 🟢</button>
-</div>
- <div id="BEBIDAS" class="secao">
-        <h3>Cafes </h3>
-        <div class="grid-flex">
-         <button class="btn-opcao" onclick="setBase('Cafes', 6, 1, 'Cafe expresso')">Expresso</button>
-         <button class="btn-opcao" onclick="setBase('Cafes', 8, 1, 'Expresso duplo')">Expresso duplo</button>
-         <button class="btn-opcao" onclick="setBase('Cafes', 10, 1, 'cappuccino')">Cappuccino</button>
-         <button class="btn-opcao" onclick="setBase('Cafes', 8, 1, 'Cafe com leite')">Cafe com leite</button>
-         <button class="btn-opcao" onclick="setBase('Cafes', 12, 1, 'Cappuccino chocolate')">Cappuccino chocolate</button>
-         <button class="btn-opcao" onclick="setBase('Cafes', 12, 1, 'Mocha')">Mocha</button>
-        </div> 
-        <h3>Bebidas </h3>
-        <div class="grid-flex">
-        <button class="btn-opcao" onclick="setBase('Agua', 4, 'Agua')">Agua</button>
-        <button class="btn-opcao" onclick="setBase('Agua c/ gas', 5, 'Agua c/ gas')">Agua c/ gas</button>
-        <button class="btn-opcao" onclick="setBase('Coca cola', 6, 'Coca cola')">Coca cola</button>
-        <button class="btn-opcao" onclick="setBase('Coca zero', 7, 'Coca zero')">Coca zero</button>
-        <button class="btn-opcao" onclick="setBase('Guarana', 6, 'Guarana')">Guarana</button>
-        <button class="btn-opcao" onclick="setBase('Agua 2', 8, '2 Aguas')">2 Aguas</button>
-        <button class="btn-opcao" onclick="setBase('Agua 3', 12, '3 Aguas')">3 Aguas</button>
-        <button class="btn-opcao" onclick="setBase('Agua 2', 16, '4 Aguas')">4 Aguas</button>
-        <button class="btn-opcao" onclick="setBase('2 Refrigerantes', 12, '2 Coca cola/guarana')">2 Coca/guarana</button>
-        <button class="btn-opcao" onclick="setBase('Coca zero 2', 14, 'Coca zero 2')">Coca zero 2</button>
-        <button class="btn-add" onclick="adicionarAoCarrinho()">+ Adicionar Sobremesa</button>
-    </div>
-</div>
-
-
+  </div>
 
 <script>
 const TELEFONE = "5512981280676";
@@ -117,7 +114,7 @@ let carrinhoTotal = [];
 const DB = {
     rolS: ["Banana", "Blue Ice", "Brownie", "Chocolate", "Choco. Branco", "Creme Avelã", "Coco", "Doce de Leite", "Limão", "Maracujá", "Menta", "Morango", "Ninho", "Paçoca", "Oreo", "Ouro Branco", "Ovomaltine", "Sonho de Valsa"],
     rolP: [{n: "Nutella", p: 3}, {n: "Pistache", p: 3}],
-    rolE: [{n: "Trufado Nutella", p: 5}, {n: "Trufado Choco Branco", p: 3}, {n: "Mini Oreo", p: 3}, {n: "Chantilly", p: 3}, {n: "Paçoca", p: 2}, {n: "TRufado doce de leite", p: 3}, {n: "gotas de choc", p: 3}],
+    rolE: [{n: "Trufado Nutella", p: 5}, {n: "Trufado Choco Branco", p: 3}, {n: "Mini Oreo", p: 3}, {n: "Chantilly", p: 3}, {n: "Paçoca", p: 2}],
     rolA: ["Chocobowl", "Granulado", "Confete", "Calda Chocolate", "Calda Morango", "Calda Caramelo"],
     acaiG: ["Banana", "Confete", "Chocobowl", "Granola", "Granulado", "Gotas Choco", "Paçoca", "Ovomaltine", "Leite em pó", "Leite Condensado"],
     acaiP: [{n:"Banana",p:3},{n:"Confete",p:2},{n:"Chocobowl",p:2},{n:"Granola",p:3},{n:"Granulado",p:2},{n:"Gotas Choco",p:3},{n:"Paçoca",p:2},{n:"Ovomaltine",p:3},{n:"Leite em pó",p:3},{n:"Leite Condensado",p:3},{n:"Morango",p:5},{n:"Choco Branco",p:5},{n:"Mini Oreo",p:5},{n:"Nutella",p:7}],
