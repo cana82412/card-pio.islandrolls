@@ -16,6 +16,8 @@
     .item-c { background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #25d366; font-size: 0.85em; }
     .btn-add { background: #d63384; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
     .btn-enviar { background: #25d366; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 10px; }
+.btn-excluir {  background: #ff4d4d;  color: white;  border: none;  padding: 4px 8px;  border-radius: 6px;  cursor: pointer;  font-weight: bold;  float: right; font-size: 12px;
+}
 </style>
 
 <div class="app">
@@ -176,11 +178,26 @@ function reset() {
 function render() {
     const lista = document.getElementById('carrinho-itens');
     let totalG = 0;
-    lista.innerHTML = carrinhoTotal.map((i, idx) => {
-        totalG += i.t;
-        return `<div class="item-c"><b>${idx+1}. ${i.b}</b> - R$${i.t.toFixed(2)}<br><small>${i.sabores.map(s=>s.n).join('/')} | ${i.acomps.join(', ')}</small></div>`;
-    }).join('');
+    
+    if (carrinhoTotal.length === 0) {
+        lista.innerHTML = "<i>Vazio...</i>";
+    } else {
+        lista.innerHTML = carrinhoTotal.map((i, idx) => {
+            totalG += i.t;
+            return `
+                <div class="item-c">
+                    <button class="btn-excluir" onclick="removerItem(${idx})">X</button>
+                    <b>${idx+1}. ${i.b}</b> - R$${i.t.toFixed(2)}<br>
+                    <small>Sabor: ${i.sabores.map(s=>s.n).join('/')} | Acomps: ${i.acomps.join(', ')}</small>
+                </div>`;
+        }).join('');
+    }
     document.getElementById('total-final').innerText = totalG.toFixed(2);
+}
+
+function removerItem(index) {
+    carrinhoTotal.splice(index, 1);
+    render();
 }
 
 function enviarWhats() {
