@@ -80,10 +80,8 @@
             <button class="btn-opcao" onclick="setBase('Banana Split', 20, 1, 'Sorvete Nutella')">Nutella</button>
             <button class="btn-opcao" onclick="setBase('Banana Split', 20, 1, 'Sorvete Doce de Leite')">Doce de Leite</button>
         </div>
-        <h3>Brownie c/ Sorvete (R$18)</h3><div class="grid-flex" id="list-brownie-sabores"></div>
-        <div id="brownie-extra"></div>
-        <button class="btn-add" onclick="adicionarAoCarrinho()">+ Adicionar Sobremesa</button>
-    </div>
+       <h3>Brownie c/ Sorvete (R$18)</h3>
+<div class="grid-flex" id="list-brownie-sabores" onclick="if(!config.nome) setBase('Brownie c/ Sorvete', 18, 1)"></div>
 
     <div id="BEBIDAS" class="secao">
         <h3>Cafes</h3>
@@ -166,10 +164,18 @@ function setBase(nome, preco, limite, s = "") {
 }
 
 function clicouSabor(n, p, btn) {
-    if(!config.nome) return alert("Escolha o tamanho primeiro!");
+    // Se não for sobremesa e não tiver base, avisa. 
+    // Se for sobremesa (que tem limite 1 fixo), ele deixa passar.
+    if(!config.nome && config.limite !== 1) return alert("Escolha o tamanho primeiro!");
+    
     const i = montando.sabores.findIndex(x => x.n === n);
-    if(i > -1) { montando.sabores.splice(i, 1); btn.classList.remove('selecionado'); }
-    else if(montando.sabores.length < config.limite) { montando.sabores.push({n, p}); btn.classList.add('selecionado'); }
+    if(i > -1) { 
+        montando.sabores.splice(i, 1); 
+        btn.classList.remove('selecionado'); 
+    } else if(montando.sabores.length < config.limite) { 
+        montando.sabores.push({n, p}); 
+        btn.classList.add('selecionado'); 
+    }
 }
 
 function toggleAcomp(n, btn, lim = 99) {
