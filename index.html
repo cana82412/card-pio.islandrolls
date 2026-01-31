@@ -13,7 +13,7 @@
         .secao { padding: 15px; border-bottom: 2px solid #f0f0f0; display: none; }
         .secao.ativa { display: block; }
         h3 { color: #00acc1; margin: 10px 0; font-size: 1em; text-transform: uppercase; border-left: 4px solid #d63384; padding-left: 10px; }
-        .grid-flex { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+        .grid-flex { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; min-height: 20px; }
         .btn-opcao { background: #fff; border: 2px solid #00acc1; color: #00acc1; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85em; }
         .btn-opcao.selecionado { background: #00acc1 !important; color: white !important; }
         .item-pagamento { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; }
@@ -82,13 +82,14 @@
             <button class="btn-opcao" onclick="setBase('Banana Split', 20, 1, 'Sorvete Nutella')">Nutella</button>
             <button class="btn-opcao" onclick="setBase('Banana Split', 20, 1, 'Sorvete Doce de Leite')">Doce de Leite</button>
         </div>
-        <h3>Brownie c/ Sorvete (R$18)</h3><div class="grid-flex" id="list-brownie-sabores"></div>
+        <h3>Brownie c/ Sorvete (R$18)</h3>
+        <div class="grid-flex" id="list-brownie-sabores"></div>
         <div id="brownie-extra"></div>
         <button class="btn-add" onclick="adicionarAoCarrinho()">+ Adicionar Sobremesa</button>
     </div>
 
     <div id="BEBIDAS" class="secao">
-        <h3>Cafes</h3>
+        <h3>Cafés</h3>
         <div class="grid-flex">
             <button class="btn-opcao" onclick="setBase('Cafes', 6, 1, 'Cafe expresso')">Expresso</button>
             <button class="btn-opcao" onclick="setBase('Cafes', 8, 1, 'Expresso duplo')">Expresso duplo</button>
@@ -107,7 +108,7 @@
             <button class="btn-opcao" onclick="setBase('Agua 2', 8, 1, '2 Aguas')">2 Aguas</button>
             <button class="btn-opcao" onclick="setBase('Agua 3', 12, 1, '3 Aguas')">3 Aguas</button>
             <button class="btn-opcao" onclick="setBase('Agua 4', 16, 1, '4 Aguas')">4 Aguas</button>
-            <button class="btn-opcao" onclick="setBase('2 Refrigerantes', 12, 1, '2 Coca cola/guarana')">2 Coca/guarana</button>
+            <button class="btn-opcao" onclick="setBase('2 Refrigerantes', 12, 1, '2 Coca/guarana')">2 Coca/guarana</button>
             <button class="btn-opcao" onclick="setBase('Coca zero 2', 14, 1, 'Coca zero 2')">Coca zero 2</button>
         </div>
         <button class="btn-add" onclick="adicionarAoCarrinho()">+ Adicionar Bebida</button>
@@ -142,7 +143,7 @@ let formaPagamento = "";
 const DB = {
     rolS: ["Banana", "Blue Ice", "Brownie", "Chocolate", "Choco. Branco", "Creme Avelã", "Coco", "Doce de Leite", "Limão", "Maracujá", "Menta", "Morango", "Ninho", "Paçoca", "Oreo", "Ouro Branco", "Ovomaltine", "Sonho de Valsa"],
     rolP: [{n: "Nutella", p: 3}, {n: "Pistache", p: 3}],
-    rolE: [{n: "Trufado Nutella", p: 5}, {n: "Trufado Choco Branco", p: 3}, {n: "Trufado Doce de leite", p: 3}, {n: "Mini Oreo", p: 3}, {n: "Chantilly", p: 3}, {n: "Paçoca", p: 2}, {n: "Gotas de  chocolate", p: 3}]
+    rolE: [{n: "Trufado Nutella", p: 5}, {n: "Trufado Choco Branco", p: 3}, {n: "Mini Oreo", p: 3}, {n: "Chantilly", p: 3}, {n: "Paçoca", p: 2}],
     rolA: ["Chocobowl", "Granulado", "Confete", "Calda Chocolate", "Calda Morango", "Calda Caramelo"],
     acaiG: ["Banana", "Confete", "Chocobowl", "Granola", "Granulado", "Gotas Choco", "Paçoca", "Ovomaltine", "Leite em pó", "Leite Condensado"],
     acaiP: [{n:"Banana",p:3},{n:"Confete",p:2},{n:"Chocobowl",p:2},{n:"Granola",p:3},{n:"Granulado",p:2},{n:"Gotas Choco",p:3},{n:"Paçoca",p:2},{n:"Ovomaltine",p:3},{n:"Leite em pó",p:3},{n:"Leite Condensado",p:3},{n:"Morango",p:5},{n:"Choco Branco",p:5},{n:"Mini Oreo",p:5},{n:"Nutella",p:7}],
@@ -164,24 +165,35 @@ function setBase(nome, preco, limite, s = "") {
     config = { nome, preco, limite };
     montando.sabores = s ? [{n: s, p: 0}] : [];
     document.querySelectorAll('.secao.ativa .btn-opcao').forEach(b => b.classList.remove('selecionado'));
-    if(event && event.target) event.target.classList.add('selecionado');
+    if(window.event && window.event.target && window.event.target.classList.contains('btn-opcao')) {
+        window.event.target.classList.add('selecionado');
+    }
 }
 
 function clicouSabor(n, p, btn) {
-    // CONSERTO DO BROWNIE AQUI
     if(!config.nome && btn.parentElement.id === "list-brownie-sabores") {
         setBase('Brownie c/ Sorvete', 18, 1);
     }
     if(!config.nome) return alert("Escolha o tamanho primeiro!");
     const i = montando.sabores.findIndex(x => x.n === n);
-    if(i > -1) { montando.sabores.splice(i, 1); btn.classList.remove('selecionado'); }
-    else if(montando.sabores.length < config.limite) { montando.sabores.push({n, p}); btn.classList.add('selecionado'); }
+    if(i > -1) { 
+        montando.sabores.splice(i, 1); 
+        btn.classList.remove('selecionado'); 
+    } else if(montando.sabores.length < config.limite) { 
+        montando.sabores.push({n, p}); 
+        btn.classList.add('selecionado'); 
+    }
 }
 
 function toggleAcomp(n, btn, lim = 99) {
     const i = montando.acomps.indexOf(n);
-    if(i > -1) { montando.acomps.splice(i, 1); btn.classList.remove('selecionado'); }
-    else if(montando.acomps.length < lim) { montando.acomps.push(n); btn.classList.add('selecionado'); }
+    if(i > -1) { 
+        montando.acomps.splice(i, 1); 
+        btn.classList.remove('selecionado'); 
+    } else if(montando.acomps.length < lim) { 
+        montando.acomps.push(n); 
+        btn.classList.add('selecionado'); 
+    }
 }
 
 function addExtra(n, p, btn) {
@@ -213,7 +225,11 @@ function render() {
     } else {
         lista.innerHTML = carrinhoTotal.map((i, idx) => {
             totalG += i.t;
-            return `<div class="item-c"><button class="btn-excluir" onclick="removerItem(${idx})">X</button><b>${idx+1}. ${i.b}</b> - R$${i.t.toFixed(2)}<br><small>${i.sabores.map(s=>s.n).join('/')} | ${i.acomps.join(', ')}</small></div>`;
+            return `<div class="item-c">
+                    <button class="btn-excluir" onclick="removerItem(${idx})">X</button>
+                    <b>${idx+1}. ${i.b}</b> - R$${i.t.toFixed(2)}<br>
+                    <small>${i.sabores.map(s=>s.n).join('/')} | ${i.acomps.join(', ')}</small>
+                </div>`;
         }).join('');
     }
     document.getElementById('total-final').innerText = totalG.toFixed(2);
@@ -252,19 +268,32 @@ function enviarWhats() {
 }
 
 function init() {
-    document.getElementById('list-sabores-rol').innerHTML = DB.rolS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('') +
-        DB.rolP.map(s => `<button class="btn-opcao" style="color:red" onclick="clicouSabor('${s.n}',3,this)">${s.n}(+3)</button>`).join('');
+    // ROLINHOS
+    const saboresRol = document.getElementById('list-sabores-rol');
+    if(saboresRol) {
+        saboresRol.innerHTML = DB.rolS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('') +
+            DB.rolP.map(s => `<button class="btn-opcao" style="color:red" onclick="clicouSabor('${s.n}',3,this)">${s.n}(+3)</button>`).join('');
+    }
+    
     document.getElementById('list-extras-rol').innerHTML = DB.rolE.map(e => `<div class="item-pagamento"><span>${e.n} (+R$${e.p})</span><button class="btn-opcao" onclick="addExtra('${e.n}',${e.p},this)">Add</button></div>`).join('');
     document.getElementById('list-acomps-rol').innerHTML = DB.rolA.map(a => `<button class="btn-opcao" onclick="toggleAcomp('${a}',this)">${a}</button>`).join('');
+    
+    // AÇAÍ
     document.getElementById('list-acai-gratis').innerHTML = DB.acaiG.map(a => `<button class="btn-opcao" onclick="toggleAcomp('${a}',this,2)">${a}</button>`).join('');
     document.getElementById('list-acai-pagos').innerHTML = DB.acaiP.map(a => `<div class="item-pagamento"><span>${a.n} (+R$${a.p})</span><button class="btn-opcao" onclick="addExtra('${a.n}',${a.p},this)">Add</button></div>`).join('');
+    
+    // WAFFLE
     document.getElementById('list-waf-recheio').innerHTML = DB.wafR.map(r => `<button class="btn-opcao" onclick="addExtra('${r.n}',${r.p},this)">${r.n} (+R$${r.p})</button>`).join('');
     document.getElementById('list-waf-sabores').innerHTML = DB.wafS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('');
     document.getElementById('list-waf-acomps').innerHTML = DB.wafA.map(a => `<button class="btn-opcao" onclick="toggleAcomp('${a}',this)">${a}</button>`).join('');
+    
+    // BROWNIE
     document.getElementById('list-brownie-sabores').innerHTML = DB.broS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('');
     document.getElementById('brownie-extra').innerHTML = `<div class="item-pagamento"><span>Chantilly (+R$3)</span><button class="btn-opcao" onclick="addExtra('Chantilly',3,this)">Add</button></div>`;
 }
-init();
+
+// Garante que o código só rode quando a página carregar tudo
+window.onload = init;
 </script>
 </body>
 </html>
