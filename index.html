@@ -1,926 +1,320 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Island Rolls</title>
-
+    <title>Island Rolls 🍦</title>
     <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #e0f7fa;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .app {
-            background: white;
-            width: 100%;
-            max-width: 450px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-
-        .header {
-            background: #00acc1;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .abas {
-            display: flex;
-            background: #f0f0f0;
-            border-bottom: 2px solid #00acc1;
-            overflow-x: auto;
-        }
-
-        .aba-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            color: #666;
-            white-space: nowrap;
-            background: #f0f0f0;
-        }
-
-        .aba-btn.ativa {
-            background: white;
-            color: #d63384;
-            border-bottom: 4px solid #d63384;
-        }
-
-        .secao {
-            padding: 15px;
-            border-bottom: 2px solid #f0f0f0;
-            display: none;
-        }
-
-        .secao.ativa {
-            display: block;
-        }
-
-        h3 {
-            color: #00acc1;
-            margin: 10px 0;
-            font-size: 1em;
-            text-transform: uppercase;
-            border-left: 4px solid #d63384;
-            padding-left: 10px;
-        }
-
-        .grid-flex {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-bottom: 10px;
-            min-height: 20px;
-        }
-
-        .btn-opcao {
-            background: #fff;
-            border: 2px solid #00acc1;
-            color: #00acc1;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85em;
-        }
-
-        .btn-opcao.selecionado {
-            background: #00acc1 !important;
-            color: white !important;
-        }
-
-        .item-pagamento {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .carrinho {
-            background: #fff;
-            width: 100%;
-            max-width: 450px;
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .item-c {
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            border-left: 4px solid #25d366;
-            font-size: 0.85em;
-        }
-
-        .btn-excluir {
-            background: #ff4d4d;
-            color: white;
-            border: none;
-            padding: 2px 8px;
-            border-radius: 5px;
-            cursor: pointer;
-            float: right;
-            font-weight: bold;
-        }
-
-        .pagamento-box {
-            background: #fdf2f8;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border: 1px dashed #d63384;
-        }
-
-        .metodo-pagamento {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .btn-pag {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #00acc1;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            font-weight: bold;
-            color: #00acc1;
-            font-size: 0.8em;
-        }
-
-        .btn-pag.selecionado {
-            background: #00acc1;
-            color: white;
-        }
-
-        #campo-troco {
-            width: 100%;
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            display: none;
-            box-sizing: border-box;
-        }
-
-        .btn-add {
-            background: #d63384;
-            color: white;
-            border: none;
-            padding: 15px;
-            width: 100%;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .btn-enviar {
-            background: #25d366;
-            color: white;
-            border: none;
-            padding: 15px;
-            width: 100%;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+        body { font-family: 'Segoe UI', sans-serif; background: #e0f7fa; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .app { background: white; width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
+        .header { background: #00acc1; color: white; padding: 20px; text-align: center; }
+        .abas { display: flex; background: #f0f0f0; border-bottom: 2px solid #00acc1; overflow-x: auto; }
+        .aba-btn { flex: 1; padding: 12px; border: none; cursor: pointer; font-weight: bold; color: #666; white-space: nowrap; }
+        .aba-btn.ativa { background: white; color: #d63384; border-bottom: 4px solid #d63384; }
+        .secao { padding: 15px; border-bottom: 2px solid #f0f0f0; display: none; }
+        .secao.ativa { display: block; }
+        h3 { color: #00acc1; margin: 10px 0; font-size: 1em; text-transform: uppercase; border-left: 4px solid #d63384; padding-left: 10px; }
+        .grid-flex { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; min-height: 20px; }
+        .btn-opcao { background: #fff; border: 2px solid #00acc1; color: #00acc1; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85em; }
+        .btn-opcao.selecionado { background: #00acc1 !important; color: white !important; }
+        .item-pagamento { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .carrinho { background: #fff; width: 100%; max-width: 450px; border-radius: 15px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .item-c { background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #25d366; font-size: 0.85em; }
+        .btn-excluir { background: #ff4d4d; color: white; border: none; padding: 2px 8px; border-radius: 5px; cursor: pointer; float: right; font-weight: bold; }
+        .pagamento-box { background: #fdf2f8; padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px dashed #d63384; }
+        .metodo-pagamento { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-pag { flex: 1; padding: 10px; border: 1px solid #00acc1; border-radius: 8px; background: white; cursor: pointer; font-weight: bold; color: #00acc1; font-size: 0.8em; }
+        .btn-pag.selecionado { background: #00acc1; color: white; }
+        #campo-troco { width: 100%; margin-top: 10px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; display: none; box-sizing: border-box; }
+        .btn-add { background: #d63384; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-enviar { background: #25d366; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
-
 <body>
 
 <div class="app">
-
-    <div class="header">
-        <h1>Island Rolls 🍦</h1>
-    </div>
-
+    <div class="header"><h1>Island Rolls 🍦</h1></div>
     <div class="abas">
         <button class="aba-btn ativa" onclick="mudarAba('rolinhos', this)">Rolinhos</button>
         <button class="aba-btn" onclick="mudarAba('acai', this)">Açaí</button>
         <button class="aba-btn" onclick="mudarAba('waffle', this)">Waffle</button>
         <button class="aba-btn" onclick="mudarAba('sobremesas', this)">Sobremesas</button>
-        <button class="aba-btn" onclick="mudarAba('bebidas', this)">Bebidas</button>
+        <button class="aba-btn" onclick="mudarAba('BEBIDAS', this)">BEBIDAS</button>
     </div>
 
     <!-- ROLINHOS -->
-
     <div id="rolinhos" class="secao ativa">
-
         <h3>1. Base</h3>
-
         <div class="grid-flex">
-
-            <button class="btn-opcao" onclick="setBase('Rolinho 1 Sabor',15,1,'',this)">1 Sabor (R$15)</button>
-
-            <button class="btn-opcao" onclick="setBase('Rolinho 2 Sabores',17,2,'',this)">2 Sabores (R$17)</button>
-
-            <button class="btn-opcao" onclick="setBase('Rolinho 3 Sabores',20,3,'',this)">3 Sabores (R$20)</button>
-
-            <button class="btn-opcao" onclick="setBase('Casquinha',10,1,'',this)">Casquinha (R$10)</button>
-
-            <button class="btn-opcao" onclick="setBase('Casquinha 2 Sabores',13,2,'',this)">Casquinha 2 Sabores (R$13)</button>
-
+            <button class="btn-opcao" onclick="setBase('Rolinho 1 Sabor', 15, 1)">1 Sabor (R$15)</button>
+            <button class="btn-opcao" onclick="setBase('Rolinho 2 Sabores', 17, 2)">2 Sabores (R$17)</button> 
+            <button class="btn-opcao" onclick="setBase('Rolinho 3 Sabores', 20, 3)">3 Sabores (R$20)</button> 
+            <button class="btn-opcao" onclick="setBase('Casquinha', 10, 1)">Casquinha (R$10)</button> 
+            <button class="btn-opcao" onclick="setBase('Casquinha 2 Sabores', 13, 2)">Casquinha 2 Sabores (R$13)</button> 
         </div>
-
-        <h3>2. Sabores</h3>
-        <div class="grid-flex" id="list-sabores-rol"></div>
-
-        <h3>3. Adicionais Pagos</h3>
-        <div id="list-extras-rol"></div>
-
-        <h3>4. Acompanhamentos Grátis</h3>
-        <div class="grid-flex" id="list-acomps-rol"></div>
-
-        <button class="btn-add" onclick="adicionarAoCarrinho()">
-            + Adicionar Rolinho
-        </button>
-
+        <h3>2. Sabores</h3><div class="grid-flex" id="list-sabores-rol"></div>
+        <h3>3. Adicionais Pagos</h3><div id="list-extras-rol"></div>
+        <h3>4. Acompanhamentos Grátis</h3><div class="grid-flex" id="list-acomps-rol"></div>
+        <button class="btn-add" onclick="adicionarAoCarrinho()">+ Adicionar Rolinho</button>
     </div>
 
-    <!-- ACAI -->
-
+    <!-- AÇAÍ -->
     <div id="acai" class="secao">
-
         <h3>1. Tamanho</h3>
-
-        <div class="grid-flex">
-
-            <button class="btn-opcao" onclick="setBase('Açaí 300ml',20,99,'',this)">300ml (R$20)</button>
-
-            <button class="btn-opcao" onclick="setBase('Açaí 400ml',23,99,'',this)">400ml (R$23)</button>
-
-        </div>
-
-        <h3>2. Grátis (Escolha 2)</h3>
-        <div class="grid-flex" id="list-acai-gratis"></div>
-
-        <h3>3. Adicionais Pagos</h3>
-        <div id="list-acai-pagos"></div>
-
-        <button class="btn-add" onclick="adicionarAoCarrinho()">
-            + Adicionar Açaí
-        </button>
-
+        <button class="btn-opcao" onclick="setBase('Açaí 300ml', 20, 99)">300ml (R$20)</button>
+        <button class="btn-opcao" onclick="setBase('Açaí 400ml', 23, 99)">400ml (R$23)</button>
+        <h3>2. Grátis (Escolha 2)</h3><div class="grid-flex" id="list-acai-gratis"></div>
+        <h3>3. Adicionais Pagos</h3><div id="list-acai-pagos"></div>
+        <button class="btn-add" onclick="adicionarAoCarrinho()">+ Adicionar Açaí</button>
     </div>
 
     <!-- WAFFLE -->
-
     <div id="waffle" class="secao">
-
         <h3>1. Tamanho</h3>
-
-        <div class="grid-flex">
-
-            <button class="btn-opcao" onclick="setBase('Waffle Big',30,1,'',this)">Big (R$30)</button>
-
-            <button class="btn-opcao" onclick="setBase('Waffle Mini',22,1,'',this)">Mini (R$22)</button>
-
-        </div>
-
-        <h3>2. Recheio</h3>
-        <div class="grid-flex" id="list-waf-recheio"></div>
-
-        <h3>3. Sorvete</h3>
-        <div class="grid-flex" id="list-waf-sabores"></div>
-
-        <h3>4. Acompanhamentos</h3>
-        <div class="grid-flex" id="list-waf-acomps"></div>
-
-        <button class="btn-add" onclick="adicionarAoCarrinho()">
-            + Adicionar Waffle
-        </button>
-
+        <button class="btn-opcao" onclick="setBase('Waffle Big', 30, 1)">Big (R$30)</button>
+        <button class="btn-opcao" onclick="setBase('Waffle Mini', 22, 1)">Mini (R$22)</button>
+        <h3>2. Recheio</h3><div class="grid-flex" id="list-waf-recheio"></div>
+        <h3>3. Sorvete (Escolha 1)</h3><div class="grid-flex" id="list-waf-sabores"></div>
+        <h3>4. Acompa/Calda/Chantilly</h3><div class="grid-flex" id="list-waf-acomps"></div>
+        <button class="btn-add" onclick="adicionarAoCarrinho()">+ Adicionar Waffle</button>
     </div>
 
     <!-- SOBREMESAS -->
-
     <div id="sobremesas" class="secao">
-
-        <h3>Banana Split</h3>
-
+        <h3>Banana Split (R$20)</h3>
         <div class="grid-flex">
-
-            <button class="btn-opcao" onclick="setBase('Banana Split',20,1,'Ninho',this)">Ninho</button>
-
-            <button class="btn-opcao" onclick="setBase('Banana Split',20,1,'Nutella',this)">Nutella</button>
-
-            <button class="btn-opcao" onclick="setBase('Banana Split',20,1,'Doce de Leite',this)">Doce de Leite</button>
-
+            <button class="btn-opcao" onclick="setBase('Banana Split', 20, 1, 'Sorvete Ninho')">Ninho</button>
+            <button class="btn-opcao" onclick="setBase('Banana Split', 20, 1, 'Sorvete Nutella')">Nutella</button>
+            <button class="btn-opcao" onclick="setBase('Banana Split', 20, 1, 'Sorvete Doce de Leite')">Doce de Leite</button>
         </div>
-
-        <h3>Brownie c/ Sorvete</h3>
-
+        
+        <h3>Brownie c/ Sorvete (R$18)</h3>
         <div class="grid-flex" id="list-brownie-sabores"></div>
-
         <div id="brownie-extra"></div>
-
-        <button class="btn-add" onclick="adicionarAoCarrinho()">
-            + Adicionar Sobremesa
-        </button>
-
+        
+        <h3>Cookie c/ Sorvete (R$22)</h3>
+        <div class="grid-flex" id="list-cookie-sabores"></div>
+        <div id="cookie-extra"></div>
+        
+        <button class="btn-add" onclick="adicionarAoCarrinho()">+ Adicionar Sobremesa</button>
     </div>
 
     <!-- BEBIDAS -->
-
-    <div id="bebidas" class="secao">
-
+    <div id="BEBIDAS" class="secao">
         <h3>Cafés</h3>
-
         <div class="grid-flex">
-
-            <button class="btn-opcao" onclick="setBase('Café Expresso',6,1,'',this)">Expresso</button>
-
-            <button class="btn-opcao" onclick="setBase('Expresso Duplo',8,1,'',this)">Expresso Duplo</button>
-
-            <button class="btn-opcao" onclick="setBase('Cappuccino',10,1,'',this)">Cappuccino</button>
-
-            <button class="btn-opcao" onclick="setBase('Café com Leite',8,1,'',this)">Café com Leite</button>
-
-            <button class="btn-opcao" onclick="setBase('Chocolate Quente',14,1,'',this)">Chocolate Quente</button>
-
-            <button class="btn-opcao" onclick="setBase('Chocolate Quente G',17,1,'',this)">Chocolate Quente G</button>
-
+            <button class="btn-opcao" onclick="setBase('Cafes', 6, 1, 'Cafe expresso')">Expresso</button>
+            <button class="btn-opcao" onclick="setBase('Cafes', 8, 1, 'Expresso duplo')">Expresso duplo</button>
+            <button class="btn-opcao" onclick="setBase('Cafes', 10, 1, 'cappuccino')">Cappuccino</button>
+            <button class="btn-opcao" onclick="setBase('Cafes', 8, 1, 'Cafe com leite')">Cafe com leite</button>
+            <button class="btn-opcao" onclick="setBase('Cafes', 12, 1, 'Cappuccino chocolate')">Cappuccino chocolate</button>
+            <button class="btn-opcao" onclick="setBase('Cafes', 12, 1, 'Mocha')">Mocha</button>
+            <button class="btn-opcao" onclick="setBase('Cafes', 14, 1, 'Chocolate quente')">Chocolate quente</button>
+            <button class="btn-opcao" onclick="setBase('Cafes', 17, 1, 'Chocolate quente G')">Chocolate quente G</button>
         </div>
-
         <h3>Bebidas</h3>
-
         <div class="grid-flex">
-
-            <button class="btn-opcao" onclick="setBase('Água',4,1,'',this)">Água</button>
-
-            <button class="btn-opcao" onclick="setBase('Água com Gás',5,1,'',this)">Água c/ gás</button>
-
-            <button class="btn-opcao" onclick="setBase('Coca Cola',6,1,'',this)">Coca Cola</button>
-
-            <button class="btn-opcao" onclick="setBase('Coca Zero',7,1,'',this)">Coca Zero</button>
-
-            <button class="btn-opcao" onclick="setBase('Guaraná',6,1,'',this)">Guaraná</button>
-
+            <button class="btn-opcao" onclick="setBase('Agua', 4, 1, 'Agua')">Agua</button>
+            <button class="btn-opcao" onclick="setBase('Agua c/ gas', 5, 1, 'Agua c/ gas')">Agua c/ gas</button>
+            <button class="btn-opcao" onclick="setBase('Coca cola', 6, 1, 'Coca cola')">Coca cola</button>
+            <button class="btn-opcao" onclick="setBase('Coca zero', 7, 1, 'Coca zero')">Coca zero</button>
+            <button class="btn-opcao" onclick="setBase('Guarana', 6, 1, 'Guarana')">Guarana</button>
+            <button class="btn-opcao" onclick="setBase('Agua 2', 8, 1, '2 Aguas')">2 Aguas</button>
+            <button class="btn-opcao" onclick="setBase('Agua 3', 12, 1, '3 Aguas')">3 Aguas</button>
+            <button class="btn-opcao" onclick="setBase('Agua 4', 16, 1, '4 Aguas')">4 Aguas</button>
+            <button class="btn-opcao" onclick="setBase('2 Refrigerantes', 12, 1, '2 Coca/guarana')">2 Coca/guarana</button>
+            <button class="btn-opcao" onclick="setBase('Coca zero 2', 14, 1, 'Coca zero 2')">Coca zero 2</button>
         </div>
-
-        <button class="btn-add" onclick="adicionarAoCarrinho()">
-            + Adicionar Bebida
-        </button>
-
+        <button class="btn-add" onclick="adicionarAoCarrinho()">+ Adicionar Bebida</button>
     </div>
-
 </div>
 
-<!-- CARRINHO -->
-
 <div class="carrinho">
-
     <h3>🛒 Seu Carrinho</h3>
-
-    <div id="carrinho-itens">
-        <i>Vazio...</i>
-    </div>
-
-    <div style="font-weight:bold;text-align:center;margin-top:10px;">
-        Total: R$ <span id="total-final">0.00</span>
-    </div>
-
+    <div id="carrinho-itens"><i>Vazio...</i></div>
+    <div style="font-weight: bold; text-align: center; margin-top: 10px;">Total: R$ <span id="total-final">0.00</span></div>
+     
     <div class="pagamento-box">
-
         <strong>Forma de Pagamento:</strong>
-
         <div class="metodo-pagamento">
-
-            <button class="btn-pag" onclick="setPagamento('Pix',this)">Pix</button>
-
-            <button class="btn-pag" onclick="setPagamento('Cartão',this)">Cartão</button>
-
-            <button class="btn-pag" onclick="setPagamento('Dinheiro',this)">Dinheiro</button>
-
+            <button class="btn-pag" onclick="setPagamento('Pix', this)">Pix</button>
+            <button class="btn-pag" onclick="setPagamento('Cartão', this)">Cartão</button>
+            <button class="btn-pag" onclick="setPagamento('Dinheiro', this)">Dinheiro</button>
         </div>
-
         <input type="text" id="campo-troco" placeholder="Troco para quanto?">
-
     </div>
 
-    <button class="btn-enviar" onclick="enviarWhats()">
-        Enviar Pedido 🟢
-    </button>
-
+    <button class="btn-enviar" onclick="enviarWhats()">Enviar Pedido 🟢</button>
 </div>
 
 <script>
-
 const TELEFONE = "5512981280676";
-
-let config = { nome:"", preco:0, limite:0 };
-
-let montando = {
-    sabores:[],
-    extras:[],
-    acomps:[]
-};
-
+let config = { nome: "", preco: 0, limite: 0 };
+let montando = { sabores: [], extras: [], acomps: [] };
 let carrinhoTotal = [];
-
 let formaPagamento = "";
 
 const DB = {
-
-    rolS: [
-        "Banana","Blue Ice","Brownie","Chocolate",
-        "Choco. Branco","Creme Avelã","Coco",
-        "Doce de Leite","Limão","Maracujá",
-        "Menta","Morango","Ninho","Paçoca",
-        "Oreo","Ouro Branco","Ovomaltine",
-        "Sonho de Valsa"
-    ],
-
-    rolP: [
-        {n:"Nutella",p:3},
-        {n:"Pistache",p:3}
-    ],
-
-    rolE: [
-        {n:"Trufado Nutella",p:5},
-        {n:"Trufado Choco Branco",p:3},
-        {n:"Mini Oreo",p:3},
-        {n:"Trufado Doce de Leite",p:3},
-        {n:"Chantilly",p:3},
-        {n:"Paçoca",p:2},
-        {n:"Gotas de chocolate",p:3}
-    ],
-
-    rolA: [
-        "Chocobowl",
-        "Granulado",
-        "Confete",
-        "Calda Chocolate",
-        "Calda Morango",
-        "Calda Caramelo"
-    ],
-
-    acaiG: [
-        "Banana","Confete","Chocobowl",
-        "Granola","Granulado","Gotas Choco",
-        "Paçoca","Ovomaltine","Leite em pó",
-        "Leite Condensado"
-    ],
-
-    acaiP: [
-        {n:"Banana",p:3},
-        {n:"Confete",p:2},
-        {n:"Chocobowl",p:2},
-        {n:"Granola",p:3},
-        {n:"Granulado",p:2},
-        {n:"Gotas Choco",p:3},
-        {n:"Paçoca",p:2},
-        {n:"Ovomaltine",p:3},
-        {n:"Leite em pó",p:3},
-        {n:"Leite Condensado",p:3},
-        {n:"Morango",p:5},
-        {n:"Choco Branco",p:5},
-        {n:"Mini Oreo",p:5},
-        {n:"Nutella",p:7}
-    ],
-
-    wafR: [
-        {n:"Doce de Leite",p:0},
-        {n:"Choco Branco",p:0},
-        {n:"Creme Avelã",p:0},
-        {n:"Nutella",p:5}
-    ],
-
-    wafS: [
-        "Banana","Brownie","Chocolate",
-        "Coco","Doce de Leite","Morango",
-        "Ninho","Oreo","Ovomaltine","Paçoca"
-    ],
-
-    wafA: [
-        "Granulado",
-        "Chocobowl",
-        "Confete",
-        "Gotas Choco",
-        "Mini Oreo",
-        "Paçoca",
-        "Calda Choco",
-        "Calda Morango",
-        "Calda Caramelo",
-        "Chantilly"
-    ],
-
-    broS: [
-        "Morango",
-        "Ninho",
-        "Chocolate",
-        "Nutella",
-        "Doce de Leite"
-    ]
+    rolS: ["Banana", "Blue Ice", "Brownie", "Chocolate", "Choco. Branco", "Creme Avelã", "Coco", "Doce de Leite", "Limão", "Maracujá", "Menta", "Morango", "Ninho", "Paçoca", "Oreo", "Ouro Branco", "Ovomaltine", "Sonho de Valsa"],
+    rolP: [{n: "Nutella", p: 3}, {n: "Pistache", p: 3}],
+    rolE: [{n: "Trufado Nutella", p: 5}, {n: "Trufado Choco Branco", p: 3}, {n: "Mini Oreo", p: 3}, {n: "Trufado Doce de leite", p: 3}, {n: "Chantilly", p: 3}, {n: "Paçoca", p: 2}, {n: "Gotas de chocolate", p: 3} ],
+    rolA: ["Chocobowl", "Granulado", "Confete", "Calda Chocolate", "Calda Morango", "Calda Caramelo"],
+    acaiG: ["Banana", "Confete", "Chocobowl", "Granola", "Granulado", "Gotas Choco", "Paçoca", "Ovomaltine", "Leite em pó", "Leite Condensado"],
+    acaiP: [{n:"Banana",p:3},{n:"Confete",p:2},{n:"Chocobowl",p:2},{n:"Granola",p:3},{n:"Granulado",p:2},{n:"Gotas Choco",p:3},{n:"Paçoca",p:2},{n:"Ovomaltine",p:3},{n:"Leite em pó",p:3},{n:"Leite Condensado",p:3},{n:"Morango",p:5},{n:"Choco Branco",p:5},{n:"Mini Oreo",p:5},{n:"Nutella",p:7}],
+    wafR: [{n:"Doce de Leite",p:0},{n:"Choco Branco",p:0},{n:"Creme Avelã",p:0},{n:"Nutella",p:5}],
+    wafS: ["Banana", "Brownie", "Chocolate", "Coco", "Doce de Leite", "Morango", "Ninho", "Oreo", "Ovomaltine", "Paçoca"],
+    wafA: ["Granulado", "Chocobowl", "Confete", "Gotas Choco", "Mini Oreo", "Paçoca", "Calda Choco", "Calda Morango", "Calda Caramelo", "Chantilly: SIM", "Chantilly: NÃO"],
+    broS: ["Morango", "Ninho", "Chocolate", "Nutella", "Doce de Leite"],
+    cooS: ["Morango", "Ninho", "Chocolate", "Nutella", "Doce de Leite"]
 };
 
-function mudarAba(id, btn){
-
-    document.querySelectorAll('.secao')
-    .forEach(s => s.classList.remove('ativa'));
-
-    document.querySelectorAll('.aba-btn')
-    .forEach(b => b.classList.remove('ativa'));
-
-    document.getElementById(id)
-    .classList.add('ativa');
-
+function mudarAba(id, btn) {
+    document.querySelectorAll('.secao').forEach(s => s.classList.remove('ativa'));
+    document.querySelectorAll('.aba-btn').forEach(b => b.classList.remove('ativa'));
+    document.getElementById(id).classList.add('ativa');
     btn.classList.add('ativa');
-
     reset();
 }
 
-function setBase(nome, preco, limite, s = "", btn = null){
-
+function setBase(nome, preco, limite, s = "") {
     config = { nome, preco, limite };
-
-    montando.sabores = s ? [{n:s,p:0}] : [];
-
-    document.querySelectorAll('.secao.ativa .btn-opcao')
-    .forEach(b => b.classList.remove('selecionado'));
-
-    if(btn){
-        btn.classList.add('selecionado');
+    montando.sabores = s ? [{n: s, p: 0}] : [];
+    document.querySelectorAll('.secao.ativa .btn-opcao').forEach(b => b.classList.remove('selecionado'));
+    if(window.event && window.event.target && window.event.target.classList.contains('btn-opcao')) {
+        window.event.target.classList.add('selecionado');
     }
 }
 
-function clicouSabor(n,p,btn){
-
-    if(!config.nome){
-        alert("Escolha o tamanho primeiro!");
-        return;
+function clicouSabor(n, p, btn) {
+    if(!config.nome && btn.parentElement.id === "list-brownie-sabores") {
+        setBase('Brownie c/ Sorvete', 18, 1);
     }
-
+    if(!config.nome && btn.parentElement.id === "list-cookie-sabores") {
+        setBase('Cookie c/ Sorvete', 22, 1);
+    }
+    if(!config.nome) return alert("Escolha o tamanho primeiro!");
     const i = montando.sabores.findIndex(x => x.n === n);
-
-    if(i > -1){
-
-        montando.sabores.splice(i,1);
-        btn.classList.remove('selecionado');
-
-    } else {
-
-        if(montando.sabores.length >= config.limite){
-            alert("Limite atingido!");
-            return;
-        }
-
-        montando.sabores.push({n,p});
-        btn.classList.add('selecionado');
+    if(i > -1) { 
+        montando.sabores.splice(i, 1); 
+        btn.classList.remove('selecionado'); 
+    } else if(montando.sabores.length < config.limite) { 
+        montando.sabores.push({n, p}); 
+        btn.classList.add('selecionado'); 
     }
 }
 
-function toggleAcomp(n,btn,lim=99){
-
+function toggleAcomp(n, btn, lim = 99) {
     const i = montando.acomps.indexOf(n);
-
-    if(i > -1){
-
-        montando.acomps.splice(i,1);
-        btn.classList.remove('selecionado');
-
-    } else {
-
-        if(montando.acomps.length >= lim){
-            alert("Limite atingido!");
-            return;
-        }
-
-        montando.acomps.push(n);
-        btn.classList.add('selecionado');
+    if(i > -1) { 
+        montando.acomps.splice(i, 1); 
+        btn.classList.remove('selecionado'); 
+    } else if(montando.acomps.length < lim) { 
+        montando.acomps.push(n); 
+        btn.classList.add('selecionado'); 
     }
 }
 
-function addExtra(n,p,btn){
-
-    if(!config.nome){
-        alert("Escolha a base primeiro!");
-        return;
-    }
-
-    montando.extras.push({n,p});
-
-    btn.innerText = "✓";
-
-    setTimeout(()=>{
-        btn.innerText = "Add";
-    },600);
+function addExtra(n, p, btn) {
+    if(!config.nome) return alert("Escolha o tamanho primeiro!");
+    montando.extras.push({n, p});
+    btn.innerText = "✓"; setTimeout(() => btn.innerText = "Add", 600);
 }
 
-function adicionarAoCarrinho(){
-
-    if(!config.nome){
-        alert("Escolha a base!");
-        return;
-    }
-
+function adicionarAoCarrinho() {
+    if(!config.nome) return alert("Escolha a base!");
     let total = config.preco;
-
     montando.sabores.forEach(s => total += s.p);
-
     montando.extras.forEach(e => total += e.p);
-
-    carrinhoTotal.push({
-        ...montando,
-        b: config.nome,
-        t: total
-    });
-
-    reset();
-
-    render();
+    carrinhoTotal.push({...montando, b: config.nome, t: total});
+    reset(); render();
 }
 
-function reset(){
-
-    config = {
-        nome:"",
-        preco:0,
-        limite:0
-    };
-
-    montando = {
-        sabores:[],
-        extras:[],
-        acomps:[]
-    };
-
-    document.querySelectorAll('.secao.ativa .btn-opcao')
-    .forEach(b => b.classList.remove('selecionado'));
+function reset() {
+    config = { nome: "", preco: 0, limite: 0 };
+    montando = { sabores: [], extras: [], acomps: [] };
+    document.querySelectorAll('.btn-opcao').forEach(b => b.classList.remove('selecionado'));
 }
 
-function render(){
-
+function render() {
     const lista = document.getElementById('carrinho-itens');
-
     let totalG = 0;
-
-    if(carrinhoTotal.length === 0){
-
+    if (carrinhoTotal.length === 0) {
         lista.innerHTML = "<i>Vazio...</i>";
-
     } else {
-
-        lista.innerHTML = carrinhoTotal.map((i,idx)=>{
-
+        lista.innerHTML = carrinhoTotal.map((i, idx) => {
             totalG += i.t;
-
-            return `
-                <div class="item-c">
-
-                    <button class="btn-excluir"
-                    onclick="removerItem(${idx})">
-                    X
-                    </button>
-
-                    <b>${idx+1}. ${i.b}</b>
-                    - R$${i.t.toFixed(2)}<br>
-
-                    <small>
-                    ${i.sabores.map(s=>s.n).join('/')}
-                    </small>
-
-                </div>
-            `;
-
+            return `<div class="item-c">
+                    <button class="btn-excluir" onclick="removerItem(${idx})">X</button>
+                    <b>${idx+1}. ${i.b}</b> - R$${i.t.toFixed(2)}<br>
+                    <small>${i.sabores.map(s=>s.n).join('/')} | ${i.acomps.join(', ')}</small>
+                </div>`;
         }).join('');
     }
-
-    document.getElementById('total-final')
-    .innerText = totalG.toFixed(2);
+    document.getElementById('total-final').innerText = totalG.toFixed(2);
 }
 
-function removerItem(index){
-
-    carrinhoTotal.splice(index,1);
-
+function removerItem(index) {
+    carrinhoTotal.splice(index, 1);
     render();
 }
 
-function setPagamento(metodo,btn){
-
+function setPagamento(metodo, btn) {
     formaPagamento = metodo;
-
-    document.querySelectorAll('.btn-pag')
-    .forEach(b => b.classList.remove('selecionado'));
-
+    document.querySelectorAll('.btn-pag').forEach(b => b.classList.remove('selecionado'));
     btn.classList.add('selecionado');
-
-    document.getElementById('campo-troco').style.display =
-    metodo === 'Dinheiro' ? 'block' : 'none';
+    document.getElementById('campo-troco').style.display = (metodo === 'Dinheiro') ? 'block' : 'none';
 }
 
-function enviarWhats(){
-
-    if(carrinhoTotal.length === 0){
-        alert("Carrinho vazio!");
-        return;
-    }
-
-    if(!formaPagamento){
-        alert("Escolha a forma de pagamento!");
-        return;
-    }
-
+function enviarWhats() {
+    if(carrinhoTotal.length === 0) return alert("Carrinho vazio!");
+    if(!formaPagamento) return alert("Escolha a forma de pagamento!");
     let trocoTexto = "";
-
-    if(formaPagamento === 'Dinheiro'){
-
-        const t =
-        document.getElementById('campo-troco').value;
-
-        trocoTexto = t
-        ? ` (Troco para R$ ${t})`
-        : " (Sem troco)";
+    if(formaPagamento === 'Dinheiro') {
+        const t = document.getElementById('campo-troco').value;
+        trocoTexto = t ? ` (Troco para R$ ${t})` : " (Não precisa de troco)";
     }
-
     let msg = `🍦 *NOVO PEDIDO - ISLAND ROLLS*\n\n`;
-
-    carrinhoTotal.forEach((i,idx)=>{
-
-        msg += `*${idx+1}. ${i.b.toUpperCase()}*\n`;
-
-        msg += `• Sabores: ${
-            i.sabores.map(s=>s.n).join(' e ')
-        }\n`;
-
-        msg += `• Extras: ${
-            i.extras.map(e=>e.n).join(', ')
-            || 'Nenhum'
-        }\n`;
-
-        msg += `• Acompanhamentos: ${
-            i.acomps.join(', ')
-            || 'Nenhum'
-        }\n`;
-
-        msg += `Valor: R$${i.t.toFixed(2)}\n\n`;
+    carrinhoTotal.forEach((i, idx) => {
+        msg += `*${idx+1}. ${i.b.toUpperCase()}*\n• Sabores: ${i.sabores.map(s=>s.n).join(' e ')}\n• Extras: ${i.extras.map(e=>e.n).join(', ') || 'Nenhum'}\n• Acomps: ${i.acomps.join(', ') || 'Nenhum'}\nValor: R$${i.t.toFixed(2)}\n\n`;
     });
-
-    msg += `*Pagamento:* ${formaPagamento}${trocoTexto}\n`;
-
-    msg += `*TOTAL:* R$ ${
-        document.getElementById('total-final').innerText
-    }`;
-
-    window.open(
-        `https://api.whatsapp.com/send?phone=${TELEFONE}&text=${encodeURIComponent(msg)}`,
-        '_blank'
-    );
+    msg += `*PAGAMENTO:* ${formaPagamento}${trocoTexto}\n`;
+    msg += `*TOTAL GERAL: R$ ${document.getElementById('total-final').innerText}*`;
+    window.open(`https://api.whatsapp.com/send?phone=${TELEFONE}&text=${encodeURIComponent(msg)}`, '_blank');
+    carrinhoTotal = []; formaPagamento = ""; render();
+    document.getElementById('campo-troco').value = "";
+    document.querySelectorAll('.btn-pag').forEach(b => b.classList.remove('selecionado'));
 }
 
-function init(){
-
+function init() {
     // ROLINHOS
-
-    document.getElementById('list-sabores-rol').innerHTML =
-
-        DB.rolS.map(s => `
-            <button class="btn-opcao"
-            onclick="clicouSabor('${s}',0,this)">
-            ${s}
-            </button>
-        `).join('')
-
-        +
-
-        DB.rolP.map(s => `
-            <button class="btn-opcao"
-            style="color:red"
-            onclick="clicouSabor('${s.n}',3,this)">
-            ${s.n}(+3)
-            </button>
-        `).join('');
-
-    document.getElementById('list-extras-rol').innerHTML =
-
-        DB.rolE.map(e => `
-            <div class="item-pagamento">
-
-                <span>${e.n} (+R$${e.p})</span>
-
-                <button class="btn-opcao"
-                onclick="addExtra('${e.n}',${e.p},this)">
-                Add
-                </button>
-
-            </div>
-        `).join('');
-
-    document.getElementById('list-acomps-rol').innerHTML =
-
-        DB.rolA.map(a => `
-            <button class="btn-opcao"
-            onclick="toggleAcomp('${a}',this)">
-            ${a}
-            </button>
-        `).join('');
-
-    // ACAI
-
-    document.getElementById('list-acai-gratis').innerHTML =
-
-        DB.acaiG.map(a => `
-            <button class="btn-opcao"
-            onclick="toggleAcomp('${a}',this,2)">
-            ${a}
-            </button>
-        `).join('');
-
-    document.getElementById('list-acai-pagos').innerHTML =
-
-        DB.acaiP.map(a => `
-            <div class="item-pagamento">
-
-                <span>${a.n} (+R$${a.p})</span>
-
-                <button class="btn-opcao"
-                onclick="addExtra('${a.n}',${a.p},this)">
-                Add
-                </button>
-
-            </div>
-        `).join('');
-
+    const saboresRol = document.getElementById('list-sabores-rol');
+    if(saboresRol) {
+        saboresRol.innerHTML = DB.rolS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('') +
+            DB.rolP.map(s => `<button class="btn-opcao" style="color:red" onclick="clicouSabor('${s.n}',3,this)">${s.n}(+3)</button>`).join('');
+    }
+    
+    document.getElementById('list-extras-rol').innerHTML = DB.rolE.map(e => `<div class="item-pagamento"><span>${e.n} (+R$${e.p})</span><button class="btn-opcao" onclick="addExtra('${e.n}',${e.p},this)">Add</button></div>`).join('');
+    document.getElementById('list-acomps-rol').innerHTML = DB.rolA.map(a => `<button class="btn-opcao" onclick="toggleAcomp('${a}',this)">${a}</button>`).join('');
+    
+    // AÇAÍ
+    document.getElementById('list-acai-gratis').innerHTML = DB.acaiG.map(a => `<button class="btn-opcao" onclick="toggleAcomp('${a}',this,2)">${a}</button>`).join('');
+    document.getElementById('list-acai-pagos').innerHTML = DB.acaiP.map(a => `<div class="item-pagamento"><span>${a.n} (+R$${a.p})</span><button class="btn-opcao" onclick="addExtra('${a.n}',${a.p},this)">Add</button></div>`).join('');
+    
     // WAFFLE
-
-    document.getElementById('list-waf-recheio').innerHTML =
-
-        DB.wafR.map(r => `
-            <button class="btn-opcao"
-            onclick="addExtra('${r.n}',${r.p},this)">
-            ${r.n} (+R$${r.p})
-            </button>
-        `).join('');
-
-    document.getElementById('list-waf-sabores').innerHTML =
-
-        DB.wafS.map(s => `
-            <button class="btn-opcao"
-            onclick="clicouSabor('${s}',0,this)">
-            ${s}
-            </button>
-        `).join('');
-
-    document.getElementById('list-waf-acomps').innerHTML =
-
-        DB.wafA.map(a => `
-            <button class="btn-opcao"
-            onclick="toggleAcomp('${a}',this)">
-            ${a}
-            </button>
-        `).join('');
-
+    document.getElementById('list-waf-recheio').innerHTML = DB.wafR.map(r => `<button class="btn-opcao" onclick="addExtra('${r.n}',${r.p},this)">${r.n} (+R$${r.p})</button>`).join('');
+    document.getElementById('list-waf-sabores').innerHTML = DB.wafS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('');
+    document.getElementById('list-waf-acomps').innerHTML = DB.wafA.map(a => `<button class="btn-opcao" onclick="toggleAcomp('${a}',this)">${a}</button>`).join('');
+    
     // BROWNIE
+    document.getElementById('list-brownie-sabores').innerHTML = DB.broS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('');
+    document.getElementById('brownie-extra').innerHTML = `<div class="item-pagamento"><span>Chantilly (+R$3)</span><button class="btn-opcao" onclick="addExtra('Chantilly',3,this)">Add</button></div>`;
 
-    document.getElementById('list-brownie-sabores').innerHTML =
-
-        DB.broS.map(s => `
-            <button class="btn-opcao"
-            onclick="clicouSabor('${s}',0,this)">
-            ${s}
-            </button>
-        `).join('');
-
-    document.getElementById('brownie-extra').innerHTML = `
-        <div class="item-pagamento">
-
-            <span>Chantilly (+R$3)</span>
-
-            <button class="btn-opcao"
-            onclick="addExtra('Chantilly',3,this)">
-            Add
-            </button>
-
-        </div>
-    `;
-
-    console.log("INIT OK");
+    // COOKIE
+    document.getElementById('list-cookie-sabores').innerHTML = DB.cooS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('');
+    document.getElementById('cookie-extra').innerHTML = `<div class="item-pagamento"><span>Chantilly (+R$3)</span><button class="btn-opcao" onclick="addExtra('Chantilly',3,this)">Add</button></div>`;
 }
 
-document.addEventListener("DOMContentLoaded", init);
-
+window.onload = init;
 </script>
-
 </body>
 </html>
-```
