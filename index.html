@@ -21,7 +21,12 @@
         .carrinho { background: #fff; width: 100%; max-width: 450px; border-radius: 15px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .item-c { background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #25d366; font-size: 0.85em; }
         .btn-excluir { background: #ff4d4d; color: white; border: none; padding: 2px 8px; border-radius: 5px; cursor: pointer; float: right; font-weight: bold; }
-        .pagamento-box { background: #fdf2f8; padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px dashed #d63384; }
+        
+        /* Box de Identificação e Pagamento */
+        .dados-box, .pagamento-box { background: #fdf2f8; padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px dashed #d63384; }
+        .dados-box { background: #f0fdfa; border-color: #00acc1; }
+        .input-dados { width: 100%; padding: 10px; margin-top: 8px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
+        
         .metodo-pagamento { display: flex; gap: 10px; margin-top: 10px; }
         .btn-pag { flex: 1; padding: 10px; border: 1px solid #00acc1; border-radius: 8px; background: white; cursor: pointer; font-weight: bold; color: #00acc1; font-size: 0.8em; }
         .btn-pag.selecionado { background: #00acc1; color: white; }
@@ -134,6 +139,14 @@
     <div id="carrinho-itens"><i>Vazio...</i></div>
     <div style="font-weight: bold; text-align: center; margin-top: 10px;">Total: R$ <span id="total-final">0.00</span></div>
      
+    <!-- NOVO: BOX DE IDENTIFICAÇÃO DO CLIENTE -->
+    <div class="dados-box">
+        <strong>Dados para Entrega / Identificação:</strong>
+        <input type="text" id="cliente-nome" class="input-dados" placeholder="Nome do Cliente / Mesa">
+        <input type="text" id="cliente-fone" class="input-dados" placeholder="Telefone de Contato">
+        <input type="text" id="cliente-end" class="input-dados" placeholder="Endereço Completo (ou Balcão)">
+    </div>
+
     <div class="pagamento-box">
         <strong>Forma de Pagamento:</strong>
         <div class="metodo-pagamento">
@@ -147,7 +160,25 @@
     <button class="btn-enviar" onclick="enviarWhats()">Enviar Pedido 🟢</button>
 </div>
 
-<script>
+<!-- Scripts Firebase (Módulos para web) -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// COLE AS SUAS CHAVES DO FIREBASE AQUI:
+const firebaseConfig = {
+    apiKey: "AIzaSyA4j5Tx90e9y4bptkFuebFW9uUIkWvjHVw",
+    authDomain: "island-rolls.firebaseapp.com",
+    projectId: "island-rolls",
+    storageBucket: "island-rolls.firebasestorage.app",
+    messagingSenderId:"795252843470" ,
+    appId: "1:795252843470:web:57752a81061bc44ae2419f"
+};
+
+// Inicializa o Firebase e o Banco Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 const TELEFONE = "5512981280676";
 let config = { nome: "", preco: 0, limite: 0 };
 let montando = { sabores: [], extras: [], acomps: [] };
@@ -168,7 +199,7 @@ const DB = {
     cooS: ["Morango", "Ninho", "Chocolate", "Nutella", "Doce de Leite"]
 };
 
-function mudarAba(id, btn) {
+window.mudarAba = function(id, btn) {
     document.querySelectorAll('.secao').forEach(s => s.classList.remove('ativa'));
     document.querySelectorAll('.aba-btn').forEach(b => b.classList.remove('ativa'));
     document.getElementById(id).classList.add('ativa');
@@ -176,7 +207,7 @@ function mudarAba(id, btn) {
     reset();
 }
 
-function setBase(nome, preco, limite, s = "") {
+window.setBase = function(nome, preco, limite, s = "") {
     config = { nome, preco, limite };
     montando.sabores = s ? [{n: s, p: 0}] : [];
     document.querySelectorAll('.secao.ativa .btn-opcao').forEach(b => b.classList.remove('selecionado'));
@@ -185,7 +216,7 @@ function setBase(nome, preco, limite, s = "") {
     }
 }
 
-function clicouSabor(n, p, btn) {
+window.clicouSabor = function(n, p, btn) {
     if(!config.nome && btn.parentElement.id === "list-brownie-sabores") {
         setBase('Brownie c/ Sorvete', 18, 1);
     }
@@ -203,7 +234,7 @@ function clicouSabor(n, p, btn) {
     }
 }
 
-function toggleAcomp(n, btn, lim = 99) {
+window.toggleAcomp = function(n, btn, lim = 99) {
     const i = montando.acomps.indexOf(n);
     if(i > -1) { 
         montando.acomps.splice(i, 1); 
@@ -214,13 +245,13 @@ function toggleAcomp(n, btn, lim = 99) {
     }
 }
 
-function addExtra(n, p, btn) {
+window.addExtra = function(n, p, btn) {
     if(!config.nome) return alert("Escolha o tamanho primeiro!");
     montando.extras.push({n, p});
     btn.innerText = "✓"; setTimeout(() => btn.innerText = "Add", 600);
 }
 
-function adicionarAoCarrinho() {
+window.adicionarAoCarrinho = function() {
     if(!config.nome) return alert("Escolha a base!");
     let total = config.preco;
     montando.sabores.forEach(s => total += s.p);
@@ -253,63 +284,87 @@ function render() {
     document.getElementById('total-final').innerText = totalG.toFixed(2);
 }
 
-function removerItem(index) {
+window.removerItem = function(index) {
     carrinhoTotal.splice(index, 1);
     render();
 }
 
-function setPagamento(metodo, btn) {
+window.setPagamento = function(metodo, btn) {
     formaPagamento = metodo;
     document.querySelectorAll('.btn-pag').forEach(b => b.classList.remove('selecionado'));
     btn.classList.add('selecionado');
     document.getElementById('campo-troco').style.display = (metodo === 'Dinheiro') ? 'block' : 'none';
 }
 
-function enviarWhats() {
+window.enviarWhats = async function() {
+    const nomeClie = document.getElementById('cliente-nome').value.trim();
+    const foneClie = document.getElementById('cliente-fone').value.trim();
+    const endClie = document.getElementById('cliente-end').value.trim();
+
     if(carrinhoTotal.length === 0) return alert("Carrinho vazio!");
+    if(!nomeClie) return alert("Por favor, digite o nome do cliente!");
     if(!formaPagamento) return alert("Escolha a forma de pagamento!");
+
     let trocoTexto = "";
     if(formaPagamento === 'Dinheiro') {
         const t = document.getElementById('campo-troco').value;
         trocoTexto = t ? ` (Troco para R$ ${t})` : " (Não precisa de troco)";
     }
+
+    // 1. SALVAMENTO NO BANCO FIREBASE (NUVEM)
+    try {
+        await addDoc(collection(db, "pedidos"), {
+            cliente: nomeClie,
+            telefone: foneClie || "Não informado",
+            endereco: endClie || "Balcão",
+            itens: carrinhoTotal,
+            pagamento: formaPagamento + trocoTexto,
+            total: document.getElementById('total-final').innerText,
+            status: "Pendente",
+            data: serverTimestamp()
+        });
+    } catch (erro) {
+        console.error("Erro ao salvar no painel:", erro);
+        alert("Aviso: O pedido será enviado ao WhatsApp, mas falhou ao sincronizar com o painel.");
+    }
+
+    // 2. MONTAGEM E ENVIO DA MENSAGEM DO WHATSAPP
     let msg = `🍦 *NOVO PEDIDO - ISLAND ROLLS*\n\n`;
+    msg += `*CLIENTE:* ${nomeClie}\n`;
+    if(foneClie) msg += `*FONE:* ${foneClie}\n`;
+    msg += `*ENDEREÇO:* ${endClie || 'Balcão'}\n\n`;
+    
     carrinhoTotal.forEach((i, idx) => {
         msg += `*${idx+1}. ${i.b.toUpperCase()}*\n• Sabores: ${i.sabores.map(s=>s.n).join(' e ')}\n• Extras: ${i.extras.map(e=>e.n).join(', ') || 'Nenhum'}\n• Acomps: ${i.acomps.join(', ') || 'Nenhum'}\nValor: R$${i.t.toFixed(2)}\n\n`;
     });
     msg += `*PAGAMENTO:* ${formaPagamento}${trocoTexto}\n`;
     msg += `*TOTAL GERAL: R$ ${document.getElementById('total-final').innerText}*`;
+    
     window.open(`https://api.whatsapp.com/send?phone=${TELEFONE}&text=${encodeURIComponent(msg)}`, '_blank');
-    carrinhoTotal = []; formaPagamento = ""; render();
+    
+    // 3. LIMPEZA AUTOMÁTICA
+    carrinhoTotal = [];
+    formaPagamento = "";
+    document.getElementById('cliente-nome').value = "";
+    document.getElementById('cliente-fone').value = "";
+    document.getElementById('cliente-end').value = "";
     document.getElementById('campo-troco').value = "";
     document.querySelectorAll('.btn-pag').forEach(b => b.classList.remove('selecionado'));
+    render();
 }
 
 function init() {
-    // ROLINHOS
-    const saboresRol = document.getElementById('list-sabores-rol');
-    if(saboresRol) {
-        saboresRol.innerHTML = DB.rolS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('') +
-            DB.rolP.map(s => `<button class="btn-opcao" style="color:red" onclick="clicouSabor('${s.n}',3,this)">${s.n}(+3)</button>`).join('');
-    }
-    
+    document.getElementById('list-sabores-rol').innerHTML = DB.rolS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('') +
+        DB.rolP.map(s => `<button class="btn-opcao" style="color:red" onclick="clicouSabor('${s.n}',3,this)">${s.n}(+3)</button>`).join('');
     document.getElementById('list-extras-rol').innerHTML = DB.rolE.map(e => `<div class="item-pagamento"><span>${e.n} (+R$${e.p})</span><button class="btn-opcao" onclick="addExtra('${e.n}',${e.p},this)">Add</button></div>`).join('');
     document.getElementById('list-acomps-rol').innerHTML = DB.rolA.map(a => `<button class="btn-opcao" onclick="toggleAcomp('${a}',this)">${a}</button>`).join('');
-    
-    // AÇAÍ
     document.getElementById('list-acai-gratis').innerHTML = DB.acaiG.map(a => `<button class="btn-opcao" onclick="toggleAcomp('${a}',this,2)">${a}</button>`).join('');
     document.getElementById('list-acai-pagos').innerHTML = DB.acaiP.map(a => `<div class="item-pagamento"><span>${a.n} (+R$${a.p})</span><button class="btn-opcao" onclick="addExtra('${a.n}',${a.p},this)">Add</button></div>`).join('');
-    
-    // WAFFLE
     document.getElementById('list-waf-recheio').innerHTML = DB.wafR.map(r => `<button class="btn-opcao" onclick="addExtra('${r.n}',${r.p},this)">${r.n} (+R$${r.p})</button>`).join('');
     document.getElementById('list-waf-sabores').innerHTML = DB.wafS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('');
     document.getElementById('list-waf-acomps').innerHTML = DB.wafA.map(a => `<button class="btn-opcao" onclick="toggleAcomp('${a}',this)">${a}</button>`).join('');
-    
-    // BROWNIE
     document.getElementById('list-brownie-sabores').innerHTML = DB.broS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('');
     document.getElementById('brownie-extra').innerHTML = `<div class="item-pagamento"><span>Chantilly (+R$3)</span><button class="btn-opcao" onclick="addExtra('Chantilly',3,this)">Add</button></div>`;
-
-    // COOKIE
     document.getElementById('list-cookie-sabores').innerHTML = DB.cooS.map(s => `<button class="btn-opcao" onclick="clicouSabor('${s}',0,this)">${s}</button>`).join('');
     document.getElementById('cookie-extra').innerHTML = `<div class="item-pagamento"><span>Chantilly (+R$3)</span><button class="btn-opcao" onclick="addExtra('Chantilly',3,this)">Add</button></div>`;
 }
