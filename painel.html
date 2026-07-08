@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Pedidos - Island Rolls 🍦</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0fdfa; padding: 15px; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 800px; }
+        .header-painel { background: #00acc1; color: white; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .lista-pedidos { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 600px) { .lista-pedidos { grid-template-columns: 1fr 1fr; } }
+        .card-pedido { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 6px solid #d63384; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-header { border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .cliente-nome { font-size: 1.1em; font-weight: bold; color: #333; }
+        .pedido-hora { font-size: 0.8em; color: #888; }
+        .pedido-detalhes { font-size: 0.9em; color: #555; margin-bottom: 12px; }
+        .item-linha { background: #f9f9f9; padding: 6px 10px; border-radius: 6px; margin-bottom: 5px; border-left: 3px solid #25d366; }
+        .pedido-info-entrega { font-size: 0.85em; background: #e0f7fa; padding: 8px; border-radius: 6px; margin-top: 5px; color: #006064; }
+        .pedido-pagamento { font-weight: bold; color: #d63384; margin-top: 10px; font-size: 0.95em; }
+        .pedido-total { font-size: 1.1em; font-weight: bold; color: #25d366; text-align: right; margin-top: 5px; }
+        .btn-concluir { background: #00acc1; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 0.95em; transition: background 0.2s; }
+        .btn-concluir:hover { background: #00838f; }
+        .sem-pedidos { text-align: center; color: #666; font-style: italic; margin-top: 40px; font-size: 1.1em; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-painel">
+        <h2>📋 Painel de Produção em Tempo Real</h2>
+        <small>Island Rolls - Uso Interno da Equipe</small>
+    </div>
+    <div id="painel-lista" class="lista-pedidos">
+        <div class="sem-pedidos">Aguardando conexão com a nuvem...</div>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, query, where, orderBy, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyA4j5Tx90e9y4bptkFuebFW9uUIkWvjHVw",
+    authDomain: "island-rolls.firebaseapp.com",
+    projectId: "island-rolls" ,
+    storageBucket: "island-rolls.firebasestorage.app",
+    messagingSenderId: "795252843470",
+    appId:"1:795252843470:web:57752a81061bc44ae2419f"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function formatarHora(timestamp) {
+    if (!timestamp) return "Agora mesmo";
+    const data = timestamp.toDate();
+    const h = String(data.getHours()).padStart(2, '0');
+    const m = String(data.getMinutes()).padStart(2, '0');
+    return `${h}:${m}`;
+}
+
+const q = query(collection(db, "pedidos"), where("status", "==", "Pendente"), orderBy("data", "asc"));
+
+onSnapshot(q, (snapshot) => {
+    const listaHtml = document.getElementById('painel-lista');
+    if (snapshot.empty) {
+        listaHtml.innerHTML = `<div class="sem-pedidos">🎉 Nenhum pedido pendente na fila!</div>`;
+        return;
+    }
+
+    listaHtml.innerHTML = snapshot.docs.map(docSnap => {
+        const p = docSnap.data();
+        const id = docSnap.id;
+        const itensHtml = p.itens.map(i => `
+            <div class="item-linha">
+                <strong>${i.b}</strong><br>
+                <small>Sabores: ${i.sabores.map(s => s.n).join('/') || 'Padrão'}</small><br>
+                <small>Adicionais: ${i.extras.map(e => e.n).join(', ') || 'Nenhum'}</small><br>
+                <small>Acomps: ${i.acomps.join(', ') || 'Nenhum'}</small>
+            </div>
+        `).join('');
+
+        return `
+            <div class="card-pedido">
+                <div>
+                    <div class="card-header">
+                        <span class="cliente-nome">👤 ${p.cliente}</span>
+                        <span class="pedido-hora">🕒 ${formatarHora(p.data)}</span>
+                    </div>
+                    <div class="pedido-detalhes">${itensHtml}</div>
+                    <div class="pedido-info-entrega">
+                        📞 Fone: ${p.telefone}<br>
+                        📍 End.: ${p.endereco}
+                    </div>
+                </div>
+                <div>
+                    <div class="pedido-pagamento">💳 Pagamento: ${p.pagamento}</div>
+                    <div class="pedido-total">Total: R$ ${p.total}</div>
+                    <button class="btn-concluir" onclick="finalizarPedido('${id}')">✓ Concluir Pedido</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+});
+
+window.finalizarPedido = async function(id) {
+    const pedidoRef = doc(db, "pedidos", id);
+    try {
+        await updateDoc(pedidoRef, { status: "Concluído" });
+    } catch (erro) {
+        console.error("Erro ao concluir:", erro);
+    }
+}
+</script>
+</body>
+</html>
