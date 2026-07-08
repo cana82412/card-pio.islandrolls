@@ -60,7 +60,7 @@ function formatarHora(timestamp) {
     return `${h}:${m}`;
 }
 
-const q = query(collection(db, "pedidos"), where("status", "==", "Pendente"), orderBy("data", "asc"));
+const q = query(collection(db, "pedidos"), where("status", "==", "Pendente"));
 
 onSnapshot(q, (snapshot) => {
     const listaHtml = document.getElementById('painel-lista');
