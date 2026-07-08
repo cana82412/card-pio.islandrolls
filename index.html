@@ -68,6 +68,7 @@
         <h3>1. Tamanho</h3>
         <button class="btn-opcao" onclick="setBase('Açaí 300ml', 20, 99)">300ml (R$20)</button>
         <button class="btn-opcao" onclick="setBase('Açaí 400ml', 23, 99)">400ml (R$23)</button>
+        <button class="btn-opcao" onclick="setBase('Açaí 500ml', 26, 99)">500ml (R$26)</button>
         <h3>2. Grátis (Escolha 2)</h3><div class="grid-flex" id="list-acai-gratis"></div>
         <h3>3. Adicionais Pagos</h3><div id="list-acai-pagos"></div>
         <button class="btn-add" onclick="adicionarAoCarrinho()">+ Adicionar Açaí</button>
@@ -93,7 +94,7 @@
             <button class="btn-opcao" onclick="setBase('Banana Split', 20, 1, 'Sorvete Doce de Leite')">Doce de Leite</button>
         </div>
         
-        <h3>Brownie c/ Sorvete (R$18)</h3>
+        <h3>Brownie c/ Sorvete (R$20)</h3>
         <div class="grid-flex" id="list-brownie-sabores"></div>
         <div id="brownie-extra"></div>
         
@@ -115,7 +116,7 @@
             <button class="btn-opcao" onclick="setBase('Cafes', 12, 1, 'Cappuccino chocolate')">Cappuccino chocolate</button>
             <button class="btn-opcao" onclick="setBase('Cafes', 12, 1, 'Mocha')">Mocha</button>
             <button class="btn-opcao" onclick="setBase('Cafes', 14, 1, 'Chocolate quente')">Chocolate quente</button>
-            <button class="btn-opcao" onclick="setBase('Cafes', 17, 1, 'Chocolate quente G')">Chocolate quente G</button>
+            <button class="btn-opcao" onclick="setBase('Cafes', 18, 1, 'Chocolate quente G')">Chocolate quente G</button>
         </div>
         <h3>Bebidas</h3>
         <div class="grid-flex">
@@ -218,7 +219,7 @@ window.setBase = function(nome, preco, limite, s = "") {
 
 window.clicouSabor = function(n, p, btn) {
     if(!config.nome && btn.parentElement.id === "list-brownie-sabores") {
-        setBase('Brownie c/ Sorvete', 18, 1);
+        setBase('Brownie c/ Sorvete', 20, 1);
     }
     if(!config.nome && btn.parentElement.id === "list-cookie-sabores") {
         setBase('Cookie c/ Sorvete', 22, 1);
